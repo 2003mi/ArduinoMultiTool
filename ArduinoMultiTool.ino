@@ -31,10 +31,10 @@ uint16_t clkoff;
 char snum[5];
 
 //Settin gup pins for menu buttons
-#define BUTTONmen1 6 //4
-#define BUTTONmen2 5 //6
-#define BUTTONmode 4 //5
-#define BUTTONback 7 //7
+#define BUTTONmen1 4
+#define BUTTONmen2 6
+#define BUTTONmode 5
+#define BUTTONback 7
 
 // Rotary Encoder Inputs
 #define CLK 14
@@ -246,6 +246,15 @@ void rotary()
 		// If the DT state is different than the CLK state then
 		// the encoder is rotating CCW so decrement
 		if (digitalRead(DT) != currentStateCLK) {
+        if (menu == 1){
+          counter = counter + rotSpeed;
+          if (counter > 1000)
+            counter = 1000;
+        } else if (menu == 2){
+          Consumer.write(MEDIA_VOLUME_UP);
+        }
+     
+		} else {
       if (menu == 1) {
 			  counter = counter - rotSpeed;
         if (counter < 1)
@@ -254,14 +263,6 @@ void rotary()
         Consumer.write(MEDIA_VOLUME_DOWN);
       }
 
-		} else {
-        if (menu == 1){
-          counter = counter + rotSpeed;
-          if (counter > 1000)
-            counter = 1000;
-        } else if (menu == 2){
-          Consumer.write(MEDIA_VOLUME_UP);
-        }
 		}
 	}
   // Remember last CLK state
