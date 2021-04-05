@@ -8,7 +8,7 @@ Comming soon*
 ## 3D files 
 Comming soon*
 
-## Instalation Guide
+## Installation Guide
 If you want to test this tool follow this guide.
 1. Download ArduinoMultiTool.ino
 2. Innstall HID-project by NicoHood
