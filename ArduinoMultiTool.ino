@@ -31,10 +31,10 @@ uint16_t clkoff;
 char snum[5];
 
 //Settin gup pins for menu buttons
-#define BUTTONmen1 4
-#define BUTTONmen2 6
-#define BUTTONmode 5
-#define BUTTONback 7
+#define BUTTONmen1 6 //4
+#define BUTTONmen2 5 //6
+#define BUTTONmode 4 //5
+#define BUTTONback 7 //7
 
 // Rotary Encoder Inputs
 #define CLK 14
@@ -49,6 +49,7 @@ int last = true;
 int stateMen1;
 int stateMen2;
 int stateBack;
+bool backMode = false;
 
 //setting up button states. i Know this code is gay and i will fix it. TBD
 int lastButtonModeState;
@@ -146,6 +147,17 @@ static const unsigned char PROGMEM soundIMG[] = {
  B00010010,
  B00000000,
 };
+static const unsigned char PROGMEM sleepIMG[] = {
+ B00111110,
+ B01111000,
+ B11110000,
+ B11110000,
+ B11110000,
+ B11110000,
+ B01111000,
+ B00111110,
+};
+
 
 void setup() {
   //Start Wire library for I2C
@@ -170,6 +182,8 @@ void setup() {
   Mouse.begin(); //Starting mosue
   //Starts Consumer for media controls. 
   Consumer.begin();
+  //Start system to be able to put pc in sleep mode
+  System.begin();
   
   //Setting up first display.
   menuDisplay();
@@ -418,15 +432,28 @@ void menubuttonBack() {
       if (buttonStateBack == HIGH) {
         if (menu == 1 && !onoff && !longPress)
             clickShift();        
-        else if (menu == 2)
+        else if (menu == 2){
+          count = 0;
+          while (digitalRead(BUTTONback) == HIGH) {
+            count+=1;
+            if (count >= 2000){
+              System.write(SYSTEM_SLEEP);
+              while (digitalRead(BUTTONback) == HIGH) count+=1;
+              backMode = true;
+            }
+            delay(1);
+        }
+        count = 0;
+        if (!backMode)
           Consumer.write(MEDIA_VOLUME_MUTE);
-
+        else if(backMode) 
+          backMode = false;
+        } 
       }
     }
   }
   // save the reading. Next time through the loop, it'll be the lastButtonState:
   lastButtonBackState = stateBack;
-
 }
 
 void clickShift() {
@@ -575,7 +602,10 @@ void volummenu() {
   //bottom line right
   w1 = 8;
   h1 = 8;
-  display.drawBitmap(SWI - w1 - 2, SHE - h1 - 1, soundIMG, w1, h1, WHITE);
+  display.drawBitmap(SWI - w1 - 2, SHE - h1 - 2, sleepIMG, w1, h1, WHITE);
+  display.setCursor(SWI - w1*2 - 2, SHE - h1 - 1);
+  display.print("/");
+  display.drawBitmap(SWI - w1*3 - 4, SHE - h1 - 1, soundIMG, w1, h1, WHITE);
 }
 
 void rotSpeedF() {
