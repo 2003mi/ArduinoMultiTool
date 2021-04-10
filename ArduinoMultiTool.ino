@@ -31,10 +31,10 @@ uint16_t clkoff;
 char snum[5];
 
 //Settin gup pins for menu buttons
-#define BUTTONmen1 6 //4
-#define BUTTONmen2 5 //6
-#define BUTTONmode 4 //5
-#define BUTTONback 7 //7
+#define BUTTONmen1 4
+#define BUTTONmen2 6
+#define BUTTONmode 5
+#define BUTTONback 7
 
 // Rotary Encoder Inputs
 #define CLK 14
