@@ -6,7 +6,7 @@ This Multi tool uses a arduino pro micro. It also uses a 0.96 inch 128x64 displa
 Comming soon*
 
 ## 3D files 
-Comming soon*
+[Thingiverse link](https://www.thingiverse.com/thing:4823460)
 
 ## Installation Guide
 If you want to test this tool follow this guide.
