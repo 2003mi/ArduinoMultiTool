@@ -62,7 +62,7 @@ int lastButtonBackState;
 int buttonStateBack = LOW;
 
 //setting up values for menu
-int menu = 1;
+int menu = 2;
 bool menuChange = true;
 
 //debunce
@@ -171,10 +171,10 @@ void setup() {
   pinMode(BUTTONmode, INPUT_PULLUP);
   pinMode(BUTTONback, INPUT_PULLUP);
 
-	// Set encoder pins as inputs
-	pinMode(CLK,INPUT);
-	pinMode(DT,INPUT);
-	pinMode(SW, INPUT_PULLUP);
+  // Set encoder pins as inputs
+  pinMode(CLK,INPUT);
+  pinMode(DT,INPUT);
+  pinMode(SW, INPUT_PULLUP);
   // Read the initial state of CLK
   lastStateCLK = digitalRead(CLK);
 
@@ -252,14 +252,14 @@ void toggle() {
 
 void rotary()
 {
-	// Read the current state of CLK
-	currentStateCLK = digitalRead(CLK);
-	// If last and current state of CLK are different, then pulse occurred
-	// React to only 1 state change to avoid double count
-	if (currentStateCLK != lastStateCLK  && currentStateCLK == 1){
-		// If the DT state is different than the CLK state then
-		// the encoder is rotating CCW so decrement
-		if (digitalRead(DT) != currentStateCLK) {
+  // Read the current state of CLK
+  currentStateCLK = digitalRead(CLK);
+  // If last and current state of CLK are different, then pulse occurred
+  // React to only 1 state change to avoid double count
+  if (currentStateCLK != lastStateCLK  && currentStateCLK == 1){
+    // If the DT state is different than the CLK state then
+    // the encoder is rotating CCW so decrement
+    if (digitalRead(DT) != currentStateCLK) {
         if (menu == 1){
           counter = counter + rotSpeed;
           if (counter > 1000)
@@ -268,28 +268,28 @@ void rotary()
           Consumer.write(MEDIA_VOLUME_UP);
         }
      
-		} else {
+    } else {
       if (menu == 1) {
-			  counter = counter - rotSpeed;
+        counter = counter - rotSpeed;
         if (counter < 1)
           counter = 1;
       } else if (menu == 2){
         Consumer.write(MEDIA_VOLUME_DOWN);
       }
 
-		}
-	}
+    }
+  }
   // Remember last CLK state
-	lastStateCLK = currentStateCLK;
-	// Put in a slight delay to help debounce the reading
-	delay(1);
+  lastStateCLK = currentStateCLK;
+  // Put in a slight delay to help debounce the reading
+  delay(1);
 }
 
 bool rotaryButton() {
-	// Read the button state
-	int btnState = digitalRead(SW);
-	//If we detect LOW signal, button is pressed
-	if (btnState == LOW) {
+  // Read the button state
+  int btnState = digitalRead(SW);
+  //If we detect LOW signal, button is pressed
+  if (btnState == LOW) {
     //Check if a long press is preformed
     if(menu ==1 && !longPress && !onoff){
         while (digitalRead(SW) == LOW) {
@@ -311,15 +311,15 @@ bool rotaryButton() {
         }
         count = 0;
       }
-		//if 50ms have passed since last LOW pulse, it means that the
-		//button has been pressed, released and pressed again
-		if (millis() - lastButtonPress > 50) {
+    //if 50ms have passed since last LOW pulse, it means that the
+    //button has been pressed, released and pressed again
+    if (millis() - lastButtonPress > 50) {
       lastButtonPress = millis();
       return true;
-		}
-		// Remember last button press event
-		lastButtonPress = millis();
-	}
+    }
+    // Remember last button press event
+    lastButtonPress = millis();
+  }
   return false;
 }
 
@@ -559,6 +559,7 @@ void clickmenu(){
 
 void volummenu() {
   //clearing display and making it ready
+  display.setTextColor(WHITE);
   display.clearDisplay();
   display.setTextSize(1);
   display.setCursor(0, 0);
